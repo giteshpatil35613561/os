@@ -1,0 +1,53 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    int n, frames, faults = 0, pointer = 0;
+
+    cout << "Enter number of pages and frame size: ";
+    cin >> n >> frames;
+
+    vector<int> pages(n);
+    vector<int> memory(frames, -1);  // Initialize memory with -1
+
+    cout << "Enter page reference string: ";
+    for (int i = 0; i < n; ++i)
+        cin >> pages[i];
+
+    cout << "\nPage\tFrames\n";
+
+    for (int i = 0; i < n; ++i) {
+        bool hit = false;
+
+        // Check if page is already in memory
+        for (int f = 0; f < frames; ++f) {
+            if (memory[f] == pages[i]) {
+                hit = true;
+                break;
+            }
+        }
+
+        // Page fault
+        if (!hit) {
+            memory[pointer] = pages[i];
+            pointer = (pointer + 1) % frames;
+            faults++;
+        }
+
+        // Print memory state
+        cout << pages[i] << "\t";
+        for (int f = 0; f < frames; ++f) {
+            if (memory[f] != -1)
+                cout << memory[f] << " ";
+            else
+                cout << "- ";
+        }
+        cout << endl;
+    }
+
+    cout << "\nTotal Page Faults: " << faults << endl;
+
+    return 0;
+    
+}
